@@ -1,0 +1,24 @@
+services:
+  - type: web
+    name: customer-pulse-poc
+    runtime: python
+    plan: 0.5c-512mb
+    buildCommand: pip install -r requirements.txt
+    startCommand: waitress-serve --listen=0.0.0.0:$PORT app:app
+    disk:
+      name: customer-pulse-data
+      mountPath: /opt/render/project/src/instance
+      sizeGB: 1
+    envVars:
+      - key: FLASK_ENV
+        value: production
+      - key: SECRET_KEY
+        generateValue: true
+      - key: ADMIN_USERNAME
+        value: admin
+      - key: SHOW_DEMO_CREDENTIALS
+        value: "false"
+      - key: DATABASE_PATH
+        value: /opt/render/project/src/instance/customer_happiness.sqlite3
+      - key: ADMIN_PASSWORD
+        sync: false
